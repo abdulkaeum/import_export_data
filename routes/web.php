@@ -14,5 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('upload.index');
+})->name('upload.index');
+
+Route::post('upload', function (){
+    request()->validate([
+        'excel_file' => ['required', 'mimes:xlx,xls,csv', 'max:40000']
+    ]);
+
+    return array_map('str_getcsv', file(request()->excel_file));
+
+})->name('upload.post');
