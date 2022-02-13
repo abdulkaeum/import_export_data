@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExcelUpload;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,15 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('upload.index');
-})->name('upload.index');
+Route::get('/', [ExcelUpload::class, 'index'])->name('upload.index');
+Route::post('upload', [ExcelUpload::class, 'store'])->name('upload.store');
 
-Route::post('upload', function (){
-    request()->validate([
-        'excel_file' => ['required', 'mimes:xlx,xls,csv', 'max:40000']
-    ]);
-
-    return array_map('str_getcsv', file(request()->excel_file));
-
-})->name('upload.post');

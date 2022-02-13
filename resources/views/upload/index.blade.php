@@ -22,7 +22,7 @@
 </head>
 <body class="antialiased">
     <div>
-        <form action="{{ route('upload.post') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('upload.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="file" name="excel_file" id="excel_file">
             <button type="submit">Submit</button>
