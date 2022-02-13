@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ExcelUpload extends Controller
@@ -17,9 +18,30 @@ class ExcelUpload extends Controller
             'excel_file' => ['required', 'mimes:xlx,xls,csv', 'max:40000']
         ]);
 
-        $data = array_map('str_getcsv', file(request()->excel_file));
-        $header = $data[0];
-        unset($data[0]);
-        return $data;
+        // set each line to an indexed array so we can loop over
+        $users = array_map('str_getcsv', file(request()->excel_file));
+
+        // set the header, lowercase them and remove the id
+        $header = array_map('strtolower', $users[0]);
+        unset($header[0]);
+
+        // we don't need the header in the data anymore
+        unset($users[0]);
+
+        foreach ($users as $user) {
+            // we don't need the id
+            unset($user[0]);
+
+            // we don't need the header in the data anymore
+            unset($user[0]);
+
+            // set user password
+
+
+            // set each user array value with their associated keys
+            User::create(array_combine($header, $user));
+        }
+
+        return 'Complete';
     }
 }
